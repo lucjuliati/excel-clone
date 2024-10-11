@@ -1,5 +1,3 @@
-
-
 function generateSpreadsheet() {
     const spreadsheet = document.querySelector(".spreadsheet")
     const tableHeader = spreadsheet.querySelector("thead tr")
@@ -39,7 +37,8 @@ function generateSpreadsheet() {
 
 let button = document.querySelectorAll('nav button');
 let menuVar = document.getElementById('menuShow');
-
+var navVar = document.getElementById('nav');
+var navover;
 
 fileMenu = [
     { name: "New", disable: false, action: "alert()" },
@@ -71,8 +70,7 @@ Array.from(button).forEach(e => e.addEventListener('click', () => {
     menuVar.style.display = 'block';
     menuVar.style.left = getOffset(e) + "px";
 
-    let current = e.textContent.toLocaleLowerCase() + "Menu";
-
+    let current = e.textContent.toLocaleLowerCase()+"Menu";
     let values = menus[current];
 
     menuVar.innerHTML = "";
@@ -93,7 +91,9 @@ Array.from(button).forEach(e => e.addEventListener('click', () => {
         div.style.padding = '5px';
 
         size += 28;
-
+        
+        div.addEventListener('mouseover', function() {navover = 1;});
+        div.addEventListener('mouseout', function() {navover = 0;});
 
         menuVar.appendChild(div);
 
@@ -156,5 +156,14 @@ function selectCells(startCell, endCell) {
     }
 }
 
+navVar.addEventListener('mouseover', function() {navover = 1;});
+navVar.addEventListener('mouseout', function() { navover = 0;});
+
+window.addEventListener('click', function() {
+    if (navover == 0) {
+        menuVar.style.height = "0px";
+        menuVar.innerHTML = "";
+    }
+});
 
 generateSpreadsheet()
