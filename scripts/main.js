@@ -72,7 +72,7 @@ Array.from(button).forEach(e => e.addEventListener('click', () => {
 
         values[i].disable ? div.style.color = '#898989' : div.style.color = '#000';
 
-        values[i].disable ? div.className = "hovermenu" : div.className = "hovermenu"  ; 
+        values[i].disable ? null : div.className = "hovermenu"  ; 
         div.style.userSelect = 'none';
         div.style.padding = '5px';
 
