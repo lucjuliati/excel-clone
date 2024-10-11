@@ -78,17 +78,8 @@ Array.from(button).forEach(e => e.addEventListener('click', () => {
 
         size += 28;
         
-        div.addEventListener('mouseover', function() {
-            navover = 1;
-            console.log(1);
-            
-        });
-
-        div.addEventListener('mouseout', function() { 
-            navover = 0;
-            console.log(0);
-            
-        });
+        div.addEventListener('mouseover', function() {navover = 1;});
+        div.addEventListener('mouseout', function() {navover = 0;});
 
         menuVar.appendChild(div);
         
@@ -98,16 +89,8 @@ Array.from(button).forEach(e => e.addEventListener('click', () => {
     
 }));
 
-navVar.addEventListener('mouseover', function() {
-    navover = 1;
-    
-});
-
-navVar.addEventListener('mouseout', function() { 
-    navover = 0;
-    
-});
-
+navVar.addEventListener('mouseover', function() {navover = 1;});
+navVar.addEventListener('mouseout', function() { navover = 0;});
 
 window.addEventListener('click', function() {
     if (navover == 0) {
