@@ -1,5 +1,3 @@
-
-
 function generateSpreadsheet() {
     const spreadsheet = document.querySelector(".spreadsheet")
     let matrix = []
@@ -25,7 +23,8 @@ function generateSpreadsheet() {
 
 let button = document.getElementsByTagName('button');
 let menuVar = document.getElementById('menuShow');
-
+var navVar = document.getElementById('nav');
+var navover;
 
 fileMenu = [
     {name:"New", disable:false, action: "alert()"},
@@ -47,6 +46,7 @@ menus = {
     editMenu: editMenu,
     helpMenu: helpMenu
 }
+
 function getOffset(el) {
     const rect = el.getBoundingClientRect();
     return rect.left + window.scrollX;
@@ -57,7 +57,6 @@ Array.from(button).forEach(e => e.addEventListener('click', () => {
     menuVar.style.left = getOffset(e)+"px";
 
     let current = e.textContent.toLocaleLowerCase()+"Menu";
-
     let values = menus[current];
 
     menuVar.innerHTML = "";
@@ -78,7 +77,18 @@ Array.from(button).forEach(e => e.addEventListener('click', () => {
         div.style.padding = '5px';
 
         size += 28;
+        
+        div.addEventListener('mouseover', function() {
+            navover = 1;
+            console.log(1);
+            
+        });
 
+        div.addEventListener('mouseout', function() { 
+            navover = 0;
+            console.log(0);
+            
+        });
 
         menuVar.appendChild(div);
         
@@ -87,5 +97,23 @@ Array.from(button).forEach(e => e.addEventListener('click', () => {
     menuVar.style.height = size +"px";
     
 }));
+
+navVar.addEventListener('mouseover', function() {
+    navover = 1;
+    
+});
+
+navVar.addEventListener('mouseout', function() { 
+    navover = 0;
+    
+});
+
+
+window.addEventListener('click', function() {
+    if (navover == 0) {
+        menuVar.style.height = "0px";
+        menuVar.innerHTML = "";
+    }
+});
 
 generateSpreadsheet()
