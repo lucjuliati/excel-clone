@@ -28,9 +28,18 @@ let menuVar = document.getElementById('menuShow');
 
 
 fileMenu = [
-    {name:"New", disable:"true", action: "alert()"},
-    {name:"Open", disable:"true", action: "alert()"},
-    {name:"Save", disable:"true", action: "alert()"}
+    {name:"New", disable:false, action: "alert()"},
+    {name:"Open", disable:true, action: "alert()"},
+    {name:"Save", disable:true, action: "alert()"}
+]
+
+editMenu = [
+    {name:"Un-do", disable:true, action: "alert()"},
+    {name:"Re-do", disable:false, action: "alert()"},
+]
+
+helpMenu = [
+    {name:"About", disable:false, action: "alert()"}
 ]
 
 menus = {
@@ -53,14 +62,28 @@ Array.from(button).forEach(e => e.addEventListener('click', () => {
 
     menuVar.innerHTML = "";
 
-    for (let i = 0; i < menus[current].length; i++) {
-        console.log(values[i].name);
+    let size = 0;
+
+    for (let i = 0; i < values.length; i++) {
+        
         var div = document.createElement('div');
+
         div.innerText = values[i].name;
+
+        values[i].disable ? div.style.color = '#898989' : div.style.color = '#000';
+
+        values[i].disable ? div.className = "hovermenu" : div.className = "hovermenu"  ; 
+        div.style.userSelect = 'none';
+        div.style.padding = '5px';
+
+        size += 28;
+
+
         menuVar.appendChild(div);
         
     }
-    
+
+    menuVar.style.height = size +"px";
     
 }));
 
