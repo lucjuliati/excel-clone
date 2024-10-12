@@ -31,6 +31,8 @@ function generateSpreadsheet() {
             } else {
                 cell.setAttribute("contenteditable", "");
                 cell.setAttribute("data-location", `${letter}${i}`);
+                cell.setAttribute("data-color", "#ffffff");
+                cell.setAttribute("data-type", "text");
                 cell.onclick = (e) => handleCellClick(e);
             }
 
@@ -39,21 +41,6 @@ function generateSpreadsheet() {
 
         tableBody.appendChild(row);
     }
-}
-
-function save() {
-    const elements = spreadsheet.querySelectorAll("td[contenteditable]");
-    let document = {};
-
-    elements.forEach((e) => {
-        const key = e.dataset.location;
-        
-        if (e.textContent != "") {
-            document[key] = e.textContent;
-        }
-    })
-
-    console.log(document)
 }
 
 function handleCellClick(e) {

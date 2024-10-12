@@ -95,25 +95,6 @@ body {
         padding: 0 3px;
         user-select: none !important;
     }
-
-    input.cell {
-        padding: 20px 0;
-        border: none;
-        outline: none;
-        border: 1px solid transparent;
-        z-index: 1;
-
-        &:focus {
-            border: 1px solid #1f6cd1;
-        }
-    }
-
-    td:has(input:focus) {
-        border: 1px solid #1f6cd1;
-        z-index: 10;
-        position: absolute;
-        box-shadow: 0 0 0 2px #4590f3a8;
-    }
 }
 
 .selected {
@@ -125,6 +106,7 @@ span#location {
     font-size: 15px;
     position: absolute;
     right: 10px;
+    font-weight: bold;
 }
 
 #contextMenu {
