@@ -28,8 +28,10 @@ body {
     }
 
     nav {
-
+        position: fixed;
+        width: 100%;
         background-color: #a7a7a7;
+        top: 0;
 
         font-size: larger;
         font-family: Arial, Helvetica, sans-serif;
@@ -62,6 +64,7 @@ body {
 .spreadsheet {
     border-collapse: collapse;
     width: 100%;
+    margin-top: 20px;
 
     th,
     td {
@@ -74,6 +77,7 @@ body {
     th {
         min-width: 100px;
         height: 24px;
+        user-select: none;
     }
 
     th:first-child {
@@ -90,11 +94,6 @@ body {
         color: #444444;
         padding: 0 3px;
         user-select: none !important;
-    }
-
-    td.row-counter span {
-        width: 100%;
-        padding: 10px 0;
     }
 
     input.cell {
@@ -120,4 +119,34 @@ body {
 .selected {
     background-color: #6cbdff41;
     border: 1px solid #4f9dddad !important;
+}
+
+span#location {
+    font-size: 15px;
+    position: absolute;
+    right: 10px;
+}
+
+#contextMenu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+
+  #contextMenu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #contextMenu ul li {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  #contextMenu ul li:hover {
+    background-color: #ddd;
 }
