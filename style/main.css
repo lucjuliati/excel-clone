@@ -5,9 +5,67 @@ html {
     font-family: sans-serif;
 }
 
+body {
+
+    #menuShow {
+
+        position: fixed; 
+        display: none;   
+        z-index: 99;
+
+        width: 100px;     
+        height: 0px;    
+
+        top: 22px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        background-color: #a7a7a7; /* Opcional: fondo semitransparente */
+
+        .hovermenu:hover {
+            background-color: aquamarine;
+        }
+    }
+
+    nav {
+        position: fixed;
+        width: 100%;
+        background-color: #a7a7a7;
+        top: 0;
+
+        font-size: larger;
+        font-family: Arial, Helvetica, sans-serif;
+
+        user-select: none;
+
+        display: flex;
+        flex-direction: row;
+
+        * {
+            padding: 0px 5px;
+            margin: 0px;
+        }
+
+        button {
+            border: 5px;
+            background-color: #0000;
+
+            &:hover {
+                background-color: antiquewhite;
+            }
+
+        }
+
+    }
+
+
+}
+
 .spreadsheet {
     border-collapse: collapse;
     width: 100%;
+    margin-top: 20px;
 
     th,
     td {
@@ -20,6 +78,7 @@ html {
     th {
         min-width: 100px;
         height: 24px;
+        user-select: none;
     }
 
     th:first-child {
@@ -36,11 +95,6 @@ html {
         color: #444444;
         padding: 0 3px;
         user-select: none !important;
-    }
-
-    td.row-counter span {
-        width: 100%;
-        padding: 10px 0;
     }
 
     input.cell {
@@ -66,4 +120,34 @@ html {
 .selected {
     background-color: #6cbdff41;
     border: 1px solid #4f9dddad !important;
+}
+
+span#location {
+    font-size: 15px;
+    position: absolute;
+    right: 10px;
+}
+
+#contextMenu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+
+  #contextMenu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #contextMenu ul li {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  #contextMenu ul li:hover {
+    background-color: #ddd;
 }
