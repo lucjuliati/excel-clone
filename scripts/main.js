@@ -47,7 +47,7 @@ menus = {
     helpMenu: [
         { name: "About", disable: false, action: function() { 
             sendModal("Excells",
-                "Version: ALPHA 0.1.0 (1320)\nMinimal excel clone with import and export functions!\nMade by Bre and Sif",
+                "Version: ALPHA 0.2.0 (1323)\nBranch version: func-general-1310\nMinimal excel clone with import and export functions!\nMade by Bre and Sif",
                 null,
                 null,
                 "Nice :)",
