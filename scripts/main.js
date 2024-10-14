@@ -18,6 +18,17 @@ let infotextVar = document.getElementById('infotext');
 let titleVar = document.getElementById('documentName');
 
 let documentStatusVar = document.getElementById('documentStatus');
+let statusBackup;
+if (!localStorage.getItem("status-backup")) {
+
+    console.log("backup: disabled (no set yet)");
+    statusBackup = "disabled";
+
+} else if (localStorage.getItem("status-backup") == 0) {
+    statusBackup = "disabled";    
+} else {
+    statusBackup = "enabled";
+}
 
 titleVar.addEventListener('dblclick', function() { 
     sendModal("Update document name",
@@ -61,12 +72,33 @@ menus = {
                 "Rows: ",
                 "Cols: "
             )
+        } },
+        { name: `Toggle backup: ${statusBackup}`, disable: false, action: function() {
+            if (statusBackup == "disabled") {
+
+                statusBackup = "enabled"
+                menus.editMenu[3].name = `Toggle backup: ${statusBackup}`;
+                localStorage.setItem("status-backup", 1)
+
+            } else if (statusBackup == "enabled") {
+
+                statusBackup = "disabled"
+                menus.editMenu[3].name = `Toggle backup: ${statusBackup}`;
+                localStorage.setItem("status-backup", 0)
+
+            } else {
+
+                statusBackup == "enabled"
+
+            }
+
+            notice("Backup toggled: " + statusBackup)
         } }
     ],
     helpMenu: [
         { name: "About", disable: false, action: function() { 
             sendModal("Excells",
-                "Version: ALPHA 0.3.0 (1411)\nBranch version: func-general-1410\nMinimal excel clone with import and export functions!\nMade by Bre and Sif",
+                "Version: ALPHA 0.4.0 (1412)\nBranch version: func-general-1410\nMinimal excel clone with import and export functions!\nMade by Bre and Sif",
                 null,
                 null,
                 "Nice :)",
@@ -209,7 +241,15 @@ window.addEventListener('beforeunload', (e) => {
     if (modalTitleVar.innerText != "New document?" ) {
         
         e.preventDefault(); 
-        
+        localStorage.setItem("type-reload", "f5");
         return message; 
+    } else {
+        localStorage.setItem("type-reload", "new")
     }
 });
+
+if (!localStorage.getItem("type-reload")) {
+    console.log("no backup");
+    console.log(localStorage.getItem("type-reload"));
+    
+}
