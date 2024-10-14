@@ -70,7 +70,7 @@ function handleCellClick(e) {
     }
 }
 
-function save() {
+function save({ backup = false }) {
     const cells = tableBody.querySelectorAll("td[contenteditable]");
 
     let file = {
@@ -92,16 +92,21 @@ function save() {
         }
     });
 
-    console.log(file)
-
-    let timestamp = new Date().getTime()
-    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(file));
-    let downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", timestamp + ".json");
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
+    if (backup) {
+        let statusBackup = localStorage.getItem("status-backup");
+        if (statusBackup == "1") {
+            localStorage.setItem("backup-data", JSON.stringify(file))
+        }
+    } else {
+        let timestamp = new Date().getTime()
+        let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(file));
+        let downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", timestamp + ".json");
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+    }
 }
 
 function open() {

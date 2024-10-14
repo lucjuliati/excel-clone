@@ -30,6 +30,20 @@ if (!localStorage.getItem("status-backup")) {
     statusBackup = "enabled";
 }
 
+function loadBackup() {
+    if (localStorage.getItem("type-reload") == "f5") {
+        try {
+            let data = JSON.parse(localStorage.getItem("backup-data"))
+            generateSpreadsheet(data)
+        } catch(err) {
+            console.error("Error while trying to read backup")
+            notice("Error while trying to read backup")
+        }
+    }
+}
+
+loadBackup()
+
 titleVar.addEventListener('dblclick', function() { 
     sendModal("Update document name",
         "Please enter a new name",
