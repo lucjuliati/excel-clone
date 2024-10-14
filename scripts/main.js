@@ -53,6 +53,7 @@ let buttons = document.querySelectorAll('nav button');
 let menuVar = document.getElementById('menuShow');
 let navVar = document.getElementById('nav');
 let modalBGVar = document.getElementById('modalBG')
+let modalMainVar = document.getElementById('modalMain')
 let modalTitlVar = document.getElementById('modalTitl')
 let modalTxtVar = document.getElementById('modalTxt')
 let mdlBtnOKVar = document.getElementById('mdlBtnOK')
@@ -75,7 +76,9 @@ menus = {
         { name: "Re-do", disable: false, action: function() { alert() } },
     ],
     helpMenu: [
-        { name: "About", disable: false, action: function() { alert() } }
+        { name: "About", disable: false, action: function() { 
+            sendModal("Excells", "Version: ALPHA 0.1.0 (1320)\nMinimal excel clone with import and export functions!\nMade by Bre and Sif", null, null, "Nice :)")
+         } }
     ]
 };
 
@@ -111,8 +114,6 @@ Array.from(buttons).forEach(e => e.addEventListener('click', () => {
         div.style.userSelect = 'none';
         div.style.padding = '5px';
 
-        
-        
         size += 28;
 
         div.addEventListener('mouseover', function () { navover = 1; });
@@ -126,26 +127,29 @@ Array.from(buttons).forEach(e => e.addEventListener('click', () => {
 
 }));
 
-modalBGVar.addEventListener('click', function() {
-    closeModal();
-})
-
 function closeModal() {
     modalBGVar.style.display = "none";
 }
 
 function sendModal(Title, Info, OKtext, OKaction, NOtext) {
-
+    
     modalBGVar.style.display = "flex"
 
     modalTitlVar.innerText = Title;
     modalTxtVar.innerText = Info;
 
-    mdlBtnOKVar.innerText = OKtext;
-    mdlBtnOKVar.addEventListener('click', OKaction);
+    if (OKtext == null) {
+        mdlBtnOKVar.style.display = "none";
+    } else {
+        mdlBtnOKVar.style.display = "inline";
+        mdlBtnOKVar.innerText = OKtext;
+        mdlBtnOKVar.addEventListener('click', OKaction);
+    }
 
     mdlBtnNOVar.innerText = NOtext;
-    // mdlBtnNOVar.addEventListener('click');
+    mdlBtnNOVar.addEventListener('click', function() {
+        closeModal()  
+    } );
 
 }
 
