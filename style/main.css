@@ -81,6 +81,7 @@ body {
         input {
             padding: 7px 7px;
         }
+
     }
 
     #menuShow {
@@ -143,7 +144,7 @@ body {
             background-color: #0000;
 
             &:hover {
-                background-color: #c0c0c0;
+                background-color: #dbdbdb;
             }
 
         }
@@ -245,7 +246,7 @@ span#location {
     overflow: hidden;
 
     &:hover {
-        filter: brightness(0.92);
+        background-color: #dbdbdb;
     }
 }
 
