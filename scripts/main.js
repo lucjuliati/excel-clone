@@ -19,29 +19,9 @@ let titleVar = document.getElementById('documentName');
 
 let documentStatusVar = document.getElementById('documentStatus');
 let statusBackup;
-if (!localStorage.getItem("status-backup")) {
-    
-    statusBackup = "disabled";
+// !
 
-} else if (localStorage.getItem("status-backup") == 0) {
-
-    statusBackup = "disabled";    
-
-} else {
-
-    statusBackup = "enabled";
-
-    try {
-        let data = JSON.parse(localStorage.getItem("backup-data"))
-        generateSpreadsheet(data)
-    } catch(err) {
-        console.error("Error while trying to read backup")
-        notice("Error while trying to read backup")
-    }
-    
-}
-
-titleVar.addEventListener('dblclick', function() { 
+titleVar.addEventListener('click', function() { 
     sendModal("Update document name",
         "Please enter a new name",
         "Update",
@@ -81,25 +61,7 @@ menus = {
             )
         } },
         { name: `Toggle auto-backup: ${statusBackup}`, disable: false, action: function() {
-            if (statusBackup == "disabled") {
 
-                statusBackup = "enabled"
-                menus.editMenu[3].name = `Toggle auto-backup: ${statusBackup}`;
-                localStorage.setItem("status-backup", 1)
-
-            } else if (statusBackup == "enabled") {
-
-                statusBackup = "disabled"
-                menus.editMenu[3].name = `Toggle auto-backup: ${statusBackup}`;
-                localStorage.setItem("status-backup", 0)
-
-            } else {
-
-                statusBackup == "enabled"
-
-            }
-
-            notice("Auto-backup toggled: " + statusBackup)
         } }
     ],
     helpMenu: [
@@ -113,9 +75,6 @@ menus = {
         } }
     ],
     debugMenu: [
-        {
-            name: "notificacion test", disable: false, action: function () {notice("r")} 
-        }
     ]
 };
 
@@ -234,13 +193,6 @@ window.addEventListener('click', function () {
 function notice(text) {
     infotextVar.textContent = text;
     infoVar.style.width =  (text.length * 8 + 100) + "px";
-    if (text=="r") {
-        let r = Math.random().toString(36).slice(2).repeat(3).slice(0,Math.random()*2+25)
-        infoVar.style.width = (r.length * 8 + 100) + "px";
-        infotextVar.textContent = r;
-    } else {
-        
-    }
     infoVar.style.transition = "top 0.2s";
     infoVar.style.top = "90%"
     setTimeout(() => {
@@ -249,13 +201,17 @@ function notice(text) {
 }
 
 window.addEventListener('beforeunload', (e) => {
+
     if (modalTitleVar.innerText != "New document?" ) {
+
         e.preventDefault(); 
-        localStorage.setItem("type-reload", "f5");
+        
         return; 
+
     } else {
-        localStorage.removeItem("type-reload")
+
     }
+
 });
 
 function loadBackup(){
@@ -263,33 +219,8 @@ function loadBackup(){
 }
 
 function checkBackup(){
-    documentStatusVar.textContent = "Checking...";
     
-    if (localStorage.getItem("status-backup") == 0) { //backup disabled
-
-        documentStatusVar.textContent = "Auto backup disabled, click to create one.";
-
-        return
-
-    } else {
-
-        if (localStorage.getItem("type-reload") == "f5" ) { // type reload is by f5?
-
-            // load last backup
-
-            localStorage.removeItem("type-reload");
     
-        } else { // no type reload? then create a backup
-    
-            documentStatusVar.textContent = "Creating backup... ";
-    
-            // create here
-    
-            documentStatusVar.textContent = "Backup done.";
-
-        }
-
-    }
 
 }
 
