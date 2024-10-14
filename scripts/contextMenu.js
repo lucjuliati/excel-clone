@@ -3,8 +3,8 @@ const contextMenu = document.getElementById('contextMenu');
 tableBody.addEventListener('contextmenu', (e) => {
     e.preventDefault();
 
-    contextMenu.style.top = `${e.clientY}px`;
-    contextMenu.style.left = `${e.clientX}px`;
+    contextMenu.style.top = `${e.clientY + window.scrollY}px`;
+    contextMenu.style.left = `${e.clientX + window.scrollX}px`;
 
     contextMenu.style.display = 'block';
 });
