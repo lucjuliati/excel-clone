@@ -77,7 +77,7 @@ menus = {
     ],
     editMenu: [
         { name: "Un-do", disable: true, action: function() { alert() } },
-        { name: "Re-do", disable: false, action: function() { alert() } },
+        { name: "Re-do", disable: true, action: function() { alert() } },
     ],
     helpMenu: [
         { name: "About", disable: false, action: function() { 
