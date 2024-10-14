@@ -54,4 +54,6 @@ function changeColor(e, type) {
             }
         }
     }
+
+    input.remove()
 }
