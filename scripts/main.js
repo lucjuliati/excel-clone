@@ -61,22 +61,19 @@ let buttons = document.querySelectorAll('nav button');
 let menuVar = document.getElementById('menuShow');
 let navVar = document.getElementById('nav');
 let modalBGVar = document.getElementById('modalBG')
-let modalTitlVar = document.getElementById('modalTitl')
+let modalTitleVar = document.getElementById('modalTitle')
 let modalTxtVar = document.getElementById('modalTxt')
 let mdlBtnOKVar = document.getElementById('mdlBtnOK')
 let mdlBtnNOVar = document.getElementById('mdlBtnNO')
 let navover;
-document.addEventListener('DOMContentLoaded', function() {
-
-});
 
 menus = {
     fileMenu: [
         { name: "New", disable: false, action: function() { 
             sendModal("New document?", "Any progress made will be discarded", "Discard anyway", function() {location.reload()}, "Cancel")
         } },
-        { name: "Open", disable: true, action: function() { alert() } },
-        { name: "Save", disable: true, action: function() { alert() } }
+        { name: "Open", disable: false, action: open },
+        { name: "Save", disable: false, action: save }
     ],
     editMenu: [
         { name: "Un-do", disable: true, action: function() { alert() } },
@@ -146,7 +143,7 @@ function sendModal(Title, Info, OKtext, OKaction, NOtext) {
 
     modalBGVar.style.display = "flex"
 
-    modalTitlVar.innerText = Title;
+    modalTitleVar.innerText = Title;
     modalTxtVar.innerText = Info;
 
     mdlBtnOKVar.innerText = OKtext;
@@ -259,10 +256,11 @@ function save() {
         }
     });
 
+    let timestamp = new Date().getTime()
     let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(file));
     let downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "test" + ".json");
+    downloadAnchor.setAttribute("download", timestamp + ".json");
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
