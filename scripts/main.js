@@ -20,14 +20,17 @@ let titleVar = document.getElementById('documentName');
 let documentStatusVar = document.getElementById('documentStatus');
 let statusBackup;
 if (!localStorage.getItem("status-backup")) {
-
-    console.log("backup: disabled (no set yet)");
+    
     statusBackup = "disabled";
 
 } else if (localStorage.getItem("status-backup") == 0) {
+
     statusBackup = "disabled";    
+
 } else {
+
     statusBackup = "enabled";
+
 }
 
 function loadBackup() {
@@ -87,17 +90,17 @@ menus = {
                 "Cols: "
             )
         } },
-        { name: `Toggle backup: ${statusBackup}`, disable: false, action: function() {
+        { name: `Toggle auto-backup: ${statusBackup}`, disable: false, action: function() {
             if (statusBackup == "disabled") {
 
                 statusBackup = "enabled"
-                menus.editMenu[3].name = `Toggle backup: ${statusBackup}`;
+                menus.editMenu[3].name = `Toggle auto-backup: ${statusBackup}`;
                 localStorage.setItem("status-backup", 1)
 
             } else if (statusBackup == "enabled") {
 
                 statusBackup = "disabled"
-                menus.editMenu[3].name = `Toggle backup: ${statusBackup}`;
+                menus.editMenu[3].name = `Toggle auto-backup: ${statusBackup}`;
                 localStorage.setItem("status-backup", 0)
 
             } else {
@@ -106,13 +109,13 @@ menus = {
 
             }
 
-            notice("Backup toggled: " + statusBackup)
+            notice("Auto-backup toggled: " + statusBackup)
         } }
     ],
     helpMenu: [
         { name: "About", disable: false, action: function() { 
             sendModal("Excells",
-                "Version: ALPHA 0.4.0 (1412)\nBranch version: func-general-1410\nMinimal excel clone with import and export functions!\nMade by Bre and Sif",
+                "Version: ALPHA 0.5.0 (1412)\nBranch version: func-general-1410\nMinimal excel clone with import and export functions!\nMade by Bre and Sif",
                 null,
                 null,
                 "Nice :)",
@@ -253,17 +256,49 @@ function notice(text) {
 
 window.addEventListener('beforeunload', (e) => {
     if (modalTitleVar.innerText != "New document?" ) {
-        
         e.preventDefault(); 
         localStorage.setItem("type-reload", "f5");
         return message; 
     } else {
-        localStorage.setItem("type-reload", "new")
+        localStorage.removeItem("type-reload")
     }
 });
 
-if (!localStorage.getItem("type-reload")) {
-    console.log("no backup");
-    console.log(localStorage.getItem("type-reload"));
-    
+function loadBackup(){
+
 }
+
+function checkBackup(){
+    documentStatusVar.textContent = "Checking...";
+    
+    if (localStorage.getItem("status-backup") == 0) { //backup disabled
+
+        documentStatusVar.textContent = "Auto backup disabled, click to create one.";
+
+        return
+
+    } else {
+
+        if (localStorage.getItem("type-reload") == "f5" ) { // type reload is by f5?
+
+            // load last backup
+
+            localStorage.removeItem("type-reload");
+    
+        } else { // no type reload? then create a backup
+    
+            documentStatusVar.textContent = "Creating backup... ";
+    
+            // create here
+    
+            documentStatusVar.textContent = "Backup done.";
+
+        }
+
+    }
+
+}
+
+setInterval(() => {
+    checkBackup();
+}, 10000);
