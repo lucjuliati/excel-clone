@@ -4,8 +4,8 @@ tableBody.addEventListener('contextmenu', (e) => {
     locationIndicator.innerHTML = e.target.dataset?.location;
     e.preventDefault();
 
-    contextMenu.style.top = `${e.clientY}px`;
-    contextMenu.style.left = `${e.clientX}px`;
+    contextMenu.style.top = `${e.clientY + window.scrollY}px`;
+    contextMenu.style.left = `${e.clientX + window.scrollX}px`;
 
     contextMenu.style.display = 'block';
 });
