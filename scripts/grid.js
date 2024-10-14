@@ -197,3 +197,23 @@ function selectCells(startCell, endCell) {
         }
     }
 }
+
+function updateSpreadsheet() {
+    
+    if ((document.getElementById('tf').value + document.getElementById('bf').value) == "") {
+        notice("You didn't type any value!")
+        
+    } else {
+        
+    } if ((document.getElementById('tf').value + document.getElementById('bf').value) * 0 == 0) {
+
+        // document.getElementById('tf').value
+        // document.getElementById('bf').value
+        
+    } else {
+        notice("An invalid value was entered, please try again")
+    }
+    
+}
+
+generateSpreadsheet();
