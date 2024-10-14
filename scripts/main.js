@@ -49,23 +49,35 @@ function handleCellClick(e) {
     }
 }
 
+// * ============
+
 let buttons = document.querySelectorAll('nav button');
 let menuVar = document.getElementById('menuShow');
-var navVar = document.getElementById('nav');
-var navover;
+let navVar = document.getElementById('nav');
+let modalBGVar = document.getElementById('modalBG')
+let modalTitlVar = document.getElementById('modalTitl')
+let modalTxtVar = document.getElementById('modalTxt')
+let mdlBtnOKVar = document.getElementById('mdlBtnOK')
+let mdlBtnNOVar = document.getElementById('mdlBtnNO')
+let navover;
+document.addEventListener('DOMContentLoaded', function() {
+
+});
 
 menus = {
     fileMenu: [
-        { name: "New", disable: false, action: "alert()" },
-        { name: "Open", disable: true, action: "alert()" },
-        { name: "Save", disable: true, action: "alert()" }
+        { name: "New", disable: false, action: function() { 
+            sendModal("New document?", "Any progress made will be discarded", "Discard anyway", function() {location.reload()}, "Cancel")
+        } },
+        { name: "Open", disable: true, action: function() { alert() } },
+        { name: "Save", disable: true, action: function() { alert() } }
     ],
     editMenu: [
-        { name: "Un-do", disable: true, action: "alert()" },
-        { name: "Re-do", disable: false, action: "alert()" },
+        { name: "Un-do", disable: true, action: function() { alert() } },
+        { name: "Re-do", disable: false, action: function() { alert() } },
     ],
     helpMenu: [
-        { name: "About", disable: false, action: "alert()" }
+        { name: "About", disable: false, action: function() { alert() } }
     ]
 };
 
@@ -95,6 +107,7 @@ Array.from(buttons).forEach(e => e.addEventListener('click', () => {
         div.style.fontFamily = 'Arial, Helvetica, sans-serif';
         div.style.userSelect = 'none';
         div.style.padding = '5px';
+        div.addEventListener('click', values[i].action );
 
         size += 28;
 
@@ -108,6 +121,31 @@ Array.from(buttons).forEach(e => e.addEventListener('click', () => {
     menuVar.style.height = size + "px";
 
 }));
+
+modalBGVar.addEventListener('click', function() {
+    closeModal();
+})
+
+function closeModal() {
+    modalBGVar.style.display = "none";
+}
+
+function sendModal(Title, Info, OKtext, OKaction, NOtext) {
+
+    modalBGVar.style.display = "flex"
+
+    modalTitlVar.innerText = Title;
+    modalTxtVar.innerText = Info;
+
+    mdlBtnOKVar.innerText = OKtext;
+    mdlBtnOKVar.addEventListener('click', OKaction);
+
+    mdlBtnNOVar.innerText = NOtext;
+    // mdlBtnNOVar.addEventListener('click');
+
+}
+
+// * ==============
 
 const table = document.querySelector('.spreadsheet')
 let isDragging = false;
