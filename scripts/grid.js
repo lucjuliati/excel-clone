@@ -70,7 +70,7 @@ function handleCellClick(e) {
     }
 }
 
-function save() {
+function save({ backup = false }) {
     const cells = tableBody.querySelectorAll("td[contenteditable]");
 
     let file = {
@@ -81,7 +81,7 @@ function save() {
     }
 
     cells.forEach((cell) => {
-        if (cell.textContent != "" && cell.dataset?.location) {
+        if ((cell.textContent != "" || cell.dataset.bg != "#fffffff") && cell.dataset?.location) {
             file.data[cell.dataset?.location] = {
                 "type": cell.dataset?.type,
                 "color": cell.dataset.color ?? "#000000",
@@ -92,13 +92,20 @@ function save() {
         }
     });
 
-    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(file));
-    let downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", document.title + ".json");
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
+    if (backup) {
+        let statusBackup = localStorage.getItem("status-backup");
+        if (statusBackup == "1") {
+            localStorage.setItem("backup-data", JSON.stringify(file))
+        }
+    } else {
+        let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(file));
+        let downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", document.title + ".json");
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+    }
 }
 
 function open() {
