@@ -8,17 +8,41 @@ let startCell = null;
 let numRows = 50;
 let numCols = 27;
 
+function generateHeader(num) {
+    const header = [];
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    for (let i = 0; i < Math.min(num, 26); i++) {
+        header.push(letters[i]);
+    }
+
+    if (num > 26) {
+        let extra = num - 26;
+        let i = 0;
+        
+        while (extra > 0) {
+            for (let j = 0; j < 26 && extra > 0; j++) {
+                header.push(letters[i] + letters[j]);
+                extra--;
+            }
+            i++;
+        }
+    }
+
+    return header;
+}
+
 function generateSpreadsheet(file = null) {
     tableBody.querySelectorAll("tr").forEach((e) => e.remove())
     tableHeader.innerHTML = ""
-
-    const header = [''].concat(Array.from({length: 26}, (_, i) => String.fromCharCode(65 + i)));
 
     if (file) {
         document.title = file.title;
         numRows = file.rows;
         numCols = file.columns;
     }
+
+    const header = ["", ...generateHeader(numCols)]
 
     for (let i = 0; i < numCols; i++) {
         let th = document.createElement("th");
@@ -54,19 +78,22 @@ function generateSpreadsheet(file = null) {
                     cell.setAttribute("data-color", "#000000");
                 }
 
-                cell.onclick = (e) => handleCellClick(e);
+                cell.onclick = (e) => {
+                    if (e.target.dataset?.location) {
+                        locationIndicator.innerHTML = e.target.dataset?.location;
+                    }
+                };
+
+                cell.onchange = (e) => {
+                    console.log("changed")
+                    documentChanged = true;
+                }
             }
 
             row.appendChild(cell);
         }
 
         tableBody.appendChild(row);
-    }
-}
-
-function handleCellClick(e) {
-    if (e.target.dataset?.location) {
-        locationIndicator.innerHTML = e.target.dataset?.location;
     }
 }
 
@@ -81,11 +108,11 @@ function save({ backup = false }) {
     }
 
     cells.forEach((cell) => {
-        if ((cell.textContent != "" || cell.dataset.bg != "#fffffff") && cell.dataset?.location) {
+        if ((cell.textContent != "" || cell.dataset.bg != "#ffffff") && cell.dataset?.location) {
             file.data[cell.dataset?.location] = {
                 "type": cell.dataset?.type,
                 "color": cell.dataset.color ?? "#000000",
-                "bg": cell.dataset.bg ?? "#fffffff",
+                "bg": cell.dataset.bg ?? "#ffffff",
                 "location": cell.dataset?.location,
                 "content": cell.textContent
             };
@@ -209,22 +236,34 @@ function selectCells(startCell, endCell) {
 }
 
 function updateSpreadsheet() {
-    
-    if ((document.getElementById('tf').value + document.getElementById('bf').value) == "") {
-        notice("You didn't type any value!");
-        
-    } else {
-        
-    } if ((document.getElementById('tf').value + document.getElementById('bf').value) * 0 == 0) {
+    let topField = document.getElementById('tf')
+    let bottomField = document.getElementById('bf')
 
-        numRows = document.getElementById('tf').value;
-        numCols = document.getElementById('bf').value;
+    if (topField.value >= 1000)  {
+        notice("Error. The document must have less than 1000 rows!");
+        return
+    } else if (bottomField.value >= 100) {
+        notice("Error. The document must have less than 100 columns!");
+        return
+    }
+
+    if ((topField.value + bottomField.value) == "") {
+        notice("You didn't type any value!");
+        return
+    } 
+
+    if ((topField.value + bottomField.value) * 0 == 0) {
+
+        numRows = topField.value;
+        numCols = bottomField.value;
         numCols++;
 
         generateSpreadsheet();
 
         notice("Spreadsheet size updated!");
-        
+
+        documentChanged = true;
+
     } else {
         notice("An invalid value was entered, please try again");
     }

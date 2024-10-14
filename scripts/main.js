@@ -9,6 +9,7 @@ let modalTxtVar = document.getElementById('modalTxt');
 let modalCont = document.getElementById('modalCont');
 let mdlBtnOKVar = document.getElementById('mdlBtnOK');
 let mdlBtnNOVar = document.getElementById('mdlBtnNO');
+let documentChanged = false
 let current = 0;
 let old = 0;
 
@@ -28,6 +29,7 @@ titleVar.addEventListener('click', function() {
         function() {
             titleVar.textContent = document.getElementById('tf').value;
             document.title = titleVar.textContent;
+            documentChanged = true;
         },
         "Cancel",
         "Name",
@@ -57,7 +59,7 @@ menus = {
                 updateSpreadsheet,
                 "Cancel",
                 "Rows",
-                "Cols"
+                "Columns"
             )
         } },
         { name: `Toggle auto-backup: ${statusBackup}`, disable: false, action: function() {
@@ -201,6 +203,7 @@ function notice(text) {
 }
 
 window.addEventListener('beforeunload', (e) => {
+    if (!documentChanged) return
 
     if (modalTitleVar.innerText != "New document?" ) {
 
@@ -220,8 +223,6 @@ function loadBackup(){
 
 function checkBackup(){
     
-    
-
 }
 
 setInterval(() => {

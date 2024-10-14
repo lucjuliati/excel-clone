@@ -17,16 +17,15 @@ tableBody.addEventListener('click', (e) => {
 });
 
 function clearCell(e) {
-    let location = locationIndicator.innerHTML;
-    const cell = document.querySelector(`td[data-location="${location}"]`);
-        
-    if (cell != null) {
+    let selected = document.querySelectorAll("td.selected");
+
+    selected.forEach((cell) => {
         cell.innerHTML = ""
         cell.style.backgroundColor = "#ffffff";
         cell.style.color = "#000000";
         cell.dataset.bg = "#ffffff";
         cell.dataset.color = "#000000";
-    }
+    });
 
     contextMenu.style.display = 'none';
 }
@@ -41,10 +40,9 @@ function changeColor(e, type) {
 
     input.onchange = (e) => {
         let color = e.target.value;
-        let location = locationIndicator.innerHTML;
-        const cell = document.querySelector(`td[data-location="${location}"]`);
-        
-        if (cell != null) {
+        let selected = document.querySelectorAll("td.selected");
+
+        selected.forEach((cell) => {
             if (type == "background") {
                 cell.style.backgroundColor = color;
                 cell.dataset.bg = color;
@@ -52,7 +50,10 @@ function changeColor(e, type) {
                 cell.style.color = color;
                 cell.dataset.color = color;
             }
-        }
-        input.remove();
+        });
+
+        documentChanged = true;
     }
+
+    input.remove();
 }
