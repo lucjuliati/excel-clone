@@ -53,7 +53,6 @@ function changeColor(e, type) {
                 cell.dataset.color = color;
             }
         }
+        input.remove();
     }
-
-    input.remove()
 }

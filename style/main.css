@@ -130,7 +130,7 @@ body {
 
         }
 
-        #documentName {
+        p:not(:first-of-type) {
             font-size: small;
             color: #777;
             padding: 4px;

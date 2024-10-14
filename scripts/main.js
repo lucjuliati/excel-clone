@@ -1,7 +1,7 @@
 let buttons = document.querySelectorAll('nav button');
 let menuVar = document.getElementById('menuShow');
 let navVar = document.getElementById('nav');
-let navover;
+let navover = 0;
 
 let modalBGVar = document.getElementById('modalBG');
 let modalTitleVar = document.getElementById('modalTitle');
@@ -15,12 +15,31 @@ let old = 0;
 let infoVar = document.getElementById('info');
 let infotextVar = document.getElementById('infotext');
 
+let titleVar = document.getElementById('documentName');
+
+let documentStatusVar = document.getElementById('documentStatus');
+
+titleVar.addEventListener('dblclick', function() { 
+    sendModal("Update document name",
+        "Please enter a new name",
+        "Update",
+        function() {
+            titleVar.textContent = document.getElementById('tf').value;
+            document.title = titleVar.textContent;
+        },
+        "Cancel",
+        "Name: ",
+        0
+    )
+    
+})
+
 menus = {
     fileMenu: [
         { name: "New", disable: false, action: function() { 
             sendModal("New document?",
-                "Any progress made will be discarded",
-                "Discard anyway",
+                "Any progress made will be discarded, are you sure?",
+                "Yes",
                 function() {location.reload()},
                 "Cancel",
                 0,
@@ -47,7 +66,7 @@ menus = {
     helpMenu: [
         { name: "About", disable: false, action: function() { 
             sendModal("Excells",
-                "Version: ALPHA 0.2.0 (1323)\nBranch version: func-general-1310\nMinimal excel clone with import and export functions!\nMade by Bre and Sif",
+                "Version: ALPHA 0.3.0 (1411)\nBranch version: func-general-1410\nMinimal excel clone with import and export functions!\nMade by Bre and Sif",
                 null,
                 null,
                 "Nice :)",
@@ -185,3 +204,12 @@ function notice(text) {
         infoVar.style.top = "110%"
     }, 5000);
 }
+
+window.addEventListener('beforeunload', (e) => {
+    if (modalTitleVar.innerText != "New document?" ) {
+        
+        e.preventDefault(); 
+        
+        return message; 
+    }
+});

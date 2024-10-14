@@ -5,17 +5,14 @@ const locationIndicator = document.querySelector("#location");
 let isDragging = false;
 let startCell = null;
 
+let numRows = 50;
+let numCols = 27;
+
 function generateSpreadsheet(file = null) {
     tableBody.querySelectorAll("tr").forEach((e) => e.remove())
     tableHeader.innerHTML = ""
 
-    let numRows = 50;
-    let numCols = 27;
-
-    const header = [
-        '', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-        'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
-    ];
+    const header = [''].concat(Array.from({length: 26}, (_, i) => String.fromCharCode(65 + i)));
 
     if (file) {
         document.title = file.title;
@@ -77,9 +74,9 @@ function save() {
     const cells = tableBody.querySelectorAll("td[contenteditable]");
 
     let file = {
-        title: document.title ?? "",
-        rows: 50,
-        columns: 27,
+        title: document.title,
+        rows: numRows,
+        columns: numCols,
         data: {}
     }
 
@@ -216,8 +213,13 @@ function updateSpreadsheet() {
         
     } if ((document.getElementById('tf').value + document.getElementById('bf').value) * 0 == 0) {
 
-        // document.getElementById('tf').value
-        // document.getElementById('bf').value
+        numRows = document.getElementById('tf').value;
+        numCols = document.getElementById('bf').value;
+        numCols++;
+
+        generateSpreadsheet()
+
+        notice("Spreadsheet size updated!")
         
     } else {
         notice("An invalid value was entered, please try again")
