@@ -3,9 +3,17 @@ const tableHeader = spreadsheet.querySelector("thead tr");
 const tableBody = spreadsheet.querySelector("tbody");
 const locationIndicator = document.querySelector("#location");
 
-function generateSpreadsheet() {
-    const numRows = 50;
-    const numCols = 27;
+function generateSpreadsheet(file = null) {
+    let numRows = 50;
+    let numCols = 27;
+
+    if (file) {
+        tableBody.querySelectorAll("tr").forEach((e) => e.remove())
+        tableHeader.innerHTML = ""
+
+        numRows = file.rows;
+        numCols = file.columns + 1;
+    }
 
     const headerItems = [
         '', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
@@ -190,5 +198,67 @@ window.addEventListener('click', function () {
         menuVar.innerHTML = "";
     }
 });
+
+function save() {
+    const cells = tableBody.querySelectorAll("td[contenteditable]");
+
+    let file = {
+        title: document.title ?? "",
+        rows: 50,
+        columns: 27,
+        data: []
+    }
+
+    cells.forEach((cell) => {
+        if (cell.textContent != "") {
+            file.data.push({
+                "type": cell.dataset?.type,
+                "color": cell.dataset?.color,
+                "location": cell.dataset?.location,
+                "content": cell.textContent
+            });
+        }
+    });
+
+    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(file));
+    let downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", "test" + ".json");
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+}
+
+function open() {
+    let input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "application/JSON");
+    document.body.appendChild(input);
+    input.click();
+
+    input.onchange = (e) => {
+        try {
+            let file = e.target.files?.[0];
+            const reader = new FileReader(); 
+
+            reader.onload = (event) => {
+                const jsonContent = JSON.parse(event.target.result);
+                if (!jsonContent.columns || !jsonContent.rows) throw new Error()
+                generateSpreadsheet(jsonContent)
+            };
+
+            reader.onerror = (error) => { 
+                throw new Error();
+            }
+
+            reader.readAsText(file);  
+        } catch (err) {
+            console.error(err)
+            alert("Error while reading the provided file!")
+        }
+    };
+
+    input.remove();
+}
 
 generateSpreadsheet();
