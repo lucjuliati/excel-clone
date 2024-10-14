@@ -31,21 +31,15 @@ if (!localStorage.getItem("status-backup")) {
 
     statusBackup = "enabled";
 
-}
-
-function loadBackup() {
-    if (localStorage.getItem("type-reload") == "f5") {
-        try {
-            let data = JSON.parse(localStorage.getItem("backup-data"))
-            generateSpreadsheet(data)
-        } catch(err) {
-            console.error("Error while trying to read backup")
-            notice("Error while trying to read backup")
-        }
+    try {
+        let data = JSON.parse(localStorage.getItem("backup-data"))
+        generateSpreadsheet(data)
+    } catch(err) {
+        console.error("Error while trying to read backup")
+        notice("Error while trying to read backup")
     }
+    
 }
-
-loadBackup()
 
 titleVar.addEventListener('dblclick', function() { 
     sendModal("Update document name",
@@ -258,7 +252,7 @@ window.addEventListener('beforeunload', (e) => {
     if (modalTitleVar.innerText != "New document?" ) {
         e.preventDefault(); 
         localStorage.setItem("type-reload", "f5");
-        return message; 
+        return; 
     } else {
         localStorage.removeItem("type-reload")
     }
