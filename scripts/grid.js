@@ -92,13 +92,10 @@ function save() {
         }
     });
 
-    console.log(file)
-
-    let timestamp = new Date().getTime()
     let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(file));
     let downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", timestamp + ".json");
+    downloadAnchor.setAttribute("download", document.title + ".json");
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -141,12 +138,12 @@ function debounce(func, timeout = 100) {
 
     return (...args) => {
         clearTimeout(timer);
-        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+        timer = setTimeout(() => func.apply(this, args), timeout);
     };
 }
 
 spreadsheet.addEventListener("mousedown", (e) => {
-    if (e.target.tagName == "TD") {
+    if (e.target.tagName == "TD" && e.button == 0) {
         isDragging = true;
         startCell = e.target;
         clearSelection();
@@ -207,7 +204,7 @@ function selectCells(startCell, endCell) {
 function updateSpreadsheet() {
     
     if ((document.getElementById('tf').value + document.getElementById('bf').value) == "") {
-        notice("You didn't type any value!")
+        notice("You didn't type any value!");
         
     } else {
         
@@ -217,12 +214,12 @@ function updateSpreadsheet() {
         numCols = document.getElementById('bf').value;
         numCols++;
 
-        generateSpreadsheet()
+        generateSpreadsheet();
 
-        notice("Spreadsheet size updated!")
+        notice("Spreadsheet size updated!");
         
     } else {
-        notice("An invalid value was entered, please try again")
+        notice("An invalid value was entered, please try again");
     }
     
 }

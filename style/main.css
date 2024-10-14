@@ -51,12 +51,9 @@ body {
         background-color: #0005;
 
         #modalMain {
-
+            min-width: 300px;
             background-color: #fff;
-            /* width: 25%;
-            height: 25%; */
-            padding: 1%;
-
+            padding: 16px 20px;
             text-align: center;
             border: 1px solid #ccc;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
@@ -64,6 +61,26 @@ body {
 
         }
         
+        #modalTitle {
+            margin: 4px 0 !important;
+            padding: 4px 0 !important;
+        }
+
+        #modalTxt {
+            margin: 0;
+        }
+
+        #modalCont label {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            color: #424242;
+            margin-top: 7px;
+        }
+
+        input {
+            padding: 7px 7px;
+        }
     }
 
     #menuShow {
@@ -75,7 +92,7 @@ body {
         width: 100px;     
         height: 0px;    
 
-        top: 22px;
+        top: 27px;
         left: 0;
         right: 0;
         bottom: 0;
@@ -95,7 +112,6 @@ body {
         width: 100%;
         background-color: #eeeeee;
         top: 0;
-
         font-size: larger;
         font-family: Arial, Helvetica, sans-serif;
 
@@ -104,6 +120,7 @@ body {
 
         display: flex;
         flex-direction: row;
+        align-items: center;
 
         border-bottom: #c0c0c0 1px solid;
 
@@ -122,6 +139,7 @@ body {
 
         button {
             border: 5px;
+            padding: 6px 8px;
             background-color: #0000;
 
             &:hover {
@@ -137,14 +155,12 @@ body {
         }
 
     }
-
-
 }
 
 .spreadsheet {
     border-collapse: collapse;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 27px;
 
     th,
     td {
@@ -215,4 +231,38 @@ span#location {
 
   #contextMenu ul li:hover {
     background-color: #ddd;
+}
+
+#documentName {
+    border: none;
+    background-color: inherit;
+    outline: none;
+    cursor: pointer;
+    min-width: 150px;
+    padding: 6px 4px;
+    max-width: 230px;
+    text-wrap: nowrap;
+    overflow: hidden;
+
+    &:hover {
+        filter: brightness(0.92);
+    }
+}
+
+#modalMain button {
+    padding: 8px 12px;
+    background-color: rgb(30, 110, 185);
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    color: white;
+
+    &:hover {
+        filter: brightness(0.9);
+    }
+}
+
+button#mdlBtnNO {
+    background-color: #c0c0c0;
+    color: #222;
 }

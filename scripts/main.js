@@ -28,10 +28,8 @@ titleVar.addEventListener('dblclick', function() {
             document.title = titleVar.textContent;
         },
         "Cancel",
-        "Name: ",
-        0
+        "Name",
     )
-    
 })
 
 menus = {
@@ -42,8 +40,6 @@ menus = {
                 "Yes",
                 function() {location.reload()},
                 "Cancel",
-                0,
-                0
             )
         } },
         { name: "Open", disable: false, action: open },
@@ -58,8 +54,8 @@ menus = {
                 "Update",
                 updateSpreadsheet,
                 "Cancel",
-                "Rows: ",
-                "Cols: "
+                "Rows",
+                "Cols"
             )
         } }
     ],
@@ -70,9 +66,7 @@ menus = {
                 null,
                 null,
                 "Nice :)",
-                0,
-                0
-                )
+            )
         } }
     ],
     debugMenu: [
@@ -142,7 +136,7 @@ function closeModal() {
     modalBGVar.style.display = "none";
 }
 
-function sendModal(Title, Info, OKtext, OKaction, NOtext, fieldTop, fieldBtm) {
+function sendModal(Title, Info, OKtext, OKaction, NOtext, fieldTop = null, fieldBtm = null) {
     
     modalBGVar.style.display = "flex"
 
@@ -165,16 +159,22 @@ function sendModal(Title, Info, OKtext, OKaction, NOtext, fieldTop, fieldBtm) {
 
     modalCont.innerHTML = ""
 
-    if (fieldTop != 0) {
+    if (fieldTop != null) {
 
-        modalCont.innerHTML = fieldTop + "<input id='tf' type=text>"
-        
+        modalCont.innerHTML = `
+            <label for='tf'>${fieldTop}
+            <input id='tf' type='text'>
+            </label>
+        `;
     }
 
-    if (fieldBtm != 0) {
+    if (fieldBtm != null) {
 
-        modalCont.innerHTML = modalCont.innerHTML + "<br>" + fieldBtm + "<input id='bf' type=text>"
-        
+        modalCont.innerHTML = modalCont.innerHTML + `
+            <label for='bf'>${fieldBtm}
+            <input id='bf' type='text'>
+            </label>
+        `;
     }
 
 }
