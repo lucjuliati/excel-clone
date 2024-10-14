@@ -182,6 +182,7 @@ span#location {
   #contextMenu ul li {
     padding: 8px 12px;
     cursor: pointer;
+    user-select: none;
   }
 
   #contextMenu ul li:hover {

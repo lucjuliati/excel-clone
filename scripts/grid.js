@@ -2,8 +2,13 @@ const spreadsheet = document.querySelector(".spreadsheet");
 const tableHeader = spreadsheet.querySelector("thead tr");
 const tableBody = spreadsheet.querySelector("tbody");
 const locationIndicator = document.querySelector("#location");
+let isDragging = false;
+let startCell = null;
 
 function generateSpreadsheet(file = null) {
+    tableBody.querySelectorAll("tr").forEach((e) => e.remove())
+    tableHeader.innerHTML = ""
+
     let numRows = 50;
     let numCols = 27;
 
@@ -13,9 +18,7 @@ function generateSpreadsheet(file = null) {
     ];
 
     if (file) {
-        tableBody.querySelectorAll("tr").forEach((e) => e.remove())
-        tableHeader.innerHTML = ""
-
+        document.title = file.title;
         numRows = file.rows;
         numCols = file.columns;
     }
@@ -32,19 +35,26 @@ function generateSpreadsheet(file = null) {
         for (let j = 0; j < numCols; j++) {
             const letter = header[j] ?? "";
             const cell = document.createElement('td');
-     
+
             if (j === 0) {
                 cell.setAttribute("class", "row-counter");
                 cell.innerHTML = i;
             } else {
                 const location = `${letter}${i}`
                 cell.setAttribute("contenteditable", "");
+                cell.setAttribute("spellcheck", false)
                 cell.setAttribute("data-location", location);
-                cell.setAttribute("data-color", "#ffffff");
                 cell.setAttribute("data-type", "text");
 
                 if (file != null && file?.data?.[location]) {
-                    cell.textContent = file.data[location].content
+                    cell.textContent = file.data[location].content;
+                    cell.style.color = file.data[location].color;
+                    cell.style.backgroundColor = file.data[location].bg;
+                    cell.setAttribute("data-bg", file.data[location].bg);
+                    cell.setAttribute("data-color", file.data[location].color);
+                } else {
+                    cell.setAttribute("data-bg", "#ffffff");
+                    cell.setAttribute("data-color", "#000000");
                 }
 
                 cell.onclick = (e) => handleCellClick(e);
@@ -77,12 +87,15 @@ function save() {
         if (cell.textContent != "" && cell.dataset?.location) {
             file.data[cell.dataset?.location] = {
                 "type": cell.dataset?.type,
-                "color": cell.dataset?.color,
+                "color": cell.dataset.color ?? "#000000",
+                "bg": cell.dataset.bg ?? "#fffffff",
                 "location": cell.dataset?.location,
                 "content": cell.textContent
             };
         }
     });
+
+    console.log(file)
 
     let timestamp = new Date().getTime()
     let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(file));
@@ -126,10 +139,6 @@ function open() {
     input.remove();
 }
 
-const table = document.querySelector('.spreadsheet')
-let isDragging = false;
-let startCell = null;
-
 function debounce(func, timeout = 100) {
     let timer;
 
@@ -139,7 +148,7 @@ function debounce(func, timeout = 100) {
     };
 }
 
-table.addEventListener("mousedown", (e) => {
+spreadsheet.addEventListener("mousedown", (e) => {
     if (e.target.tagName == "TD") {
         isDragging = true;
         startCell = e.target;
@@ -151,7 +160,7 @@ table.addEventListener("mousedown", (e) => {
     }
 })
 
-table.addEventListener('mousemove', debounce((e) => {
+spreadsheet.addEventListener('mousemove', debounce((e) => {
     if (!isDragging) return;
 
     if (e.target.tagName == 'TD') {
@@ -160,7 +169,7 @@ table.addEventListener('mousemove', debounce((e) => {
     }
 }, 15));
 
-table.addEventListener('mouseup', function () {
+spreadsheet.addEventListener('mouseup', function () {
     isDragging = false;
     startCell = null;
 });
@@ -187,7 +196,7 @@ function selectCells(startCell, endCell) {
     const maxCol = Math.max(startCol, endCol);
 
     for (let row = minRow; row <= maxRow; row++) {
-        const currentRow = table.rows[row];
+        const currentRow = spreadsheet.rows[row];
         for (let col = minCol; col <= maxCol; col++) {
             const currentCell = currentRow.cells[col];
 
