@@ -49,8 +49,6 @@ function handleCellClick(e) {
     }
 }
 
-// * ============
-
 let buttons = document.querySelectorAll('nav button');
 let menuVar = document.getElementById('menuShow');
 let navVar = document.getElementById('nav');
@@ -101,14 +99,20 @@ Array.from(buttons).forEach(e => e.addEventListener('click', () => {
         var div = document.createElement('div');
         div.innerText = values[i].name;
 
-        values[i].disable ? div.style.color = '#898989' : div.style.color = '#000';
-        values[i].disable ? null : div.className = "hovermenu";
+        if (values[i].disable) {
+            div.style.color = '#898989'
+        } else {
+            div.addEventListener('click', function() {menuVar.style.display = 'none'} );
+            div.addEventListener('click',values[i].action);
+            div.style.color = '#000'
+        }
 
         div.style.fontFamily = 'Arial, Helvetica, sans-serif';
         div.style.userSelect = 'none';
         div.style.padding = '5px';
-        div.addEventListener('click', values[i].action );
 
+        
+        
         size += 28;
 
         div.addEventListener('mouseover', function () { navover = 1; });
@@ -144,8 +148,6 @@ function sendModal(Title, Info, OKtext, OKaction, NOtext) {
     // mdlBtnNOVar.addEventListener('click');
 
 }
-
-// * ==============
 
 const table = document.querySelector('.spreadsheet')
 let isDragging = false;
@@ -224,8 +226,7 @@ navVar.addEventListener('mouseout', function () { navover = 0; });
 
 window.addEventListener('click', function () {
     if (navover == 0) {
-        menuVar.style.height = "0px";
-        menuVar.innerHTML = "";
+        menuVar.style.display = 'none';
     }
 });
 
