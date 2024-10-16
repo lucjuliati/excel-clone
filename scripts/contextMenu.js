@@ -24,8 +24,14 @@ function clearCell(e) {
         cell.style.backgroundColor = "#ffffff";
         cell.style.color = "#000000";
         cell.dataset.bg = "#ffffff";
+        cell.dataset.type = "text";
         cell.dataset.color = "#000000";
+        cell.removeAttribute("data-checked")
     });
+
+    selected.forEach((cell) => {
+        cell.classList.remove("selected")
+    })
 
     contextMenu.style.display = 'none';
 }
@@ -56,4 +62,22 @@ function changeColor(e, type) {
     }
 
     input.remove();
+}
+
+function changeType(e) {
+    let selected = document.querySelectorAll("td.selected");
+    const typeSelect = document.querySelector("#typeSelect")
+
+    selected.forEach((cell) => {
+        cell.dataset.type = e.value;
+
+        if (e.value == "checkbox") {
+            cell.innerHTML = `<input type="checkbox" />`;
+            cell.dataset.checked = "0"
+        }
+    })
+
+    documentChanged = true;
+    contextMenu.style.display = 'none';
+    typeSelect.value = "text"
 }

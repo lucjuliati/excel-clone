@@ -88,10 +88,10 @@ body {
 
         position: fixed; 
         display: none;   
-        z-index: 99;
+        z-index: 101;
 
         width: 100px;     
-        height: 0px;    
+        min-height: 30px;
 
         top: 27px;
         left: 0;
@@ -114,16 +114,23 @@ body {
         background-color: #eeeeee;
         top: 0;
         font-size: larger;
+        z-index: 100;
+        height: fit-content;
         font-family: Arial, Helvetica, sans-serif;
-
-        text-align: center;
-        user-select: none;
-
         display: flex;
-        flex-direction: row;
-        align-items: center;
+        flex-direction: column;
 
-        border-bottom: #c0c0c0 1px solid;
+        div {
+            text-align: center;
+            user-select: none;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        div:first-child {
+            border-bottom: #c0c0c0 1px solid;
+        }
 
         * {
             padding: 0px 5px;
@@ -142,6 +149,7 @@ body {
             border: 5px;
             padding: 6px 8px;
             background-color: #0000;
+            font-size: 15px;
 
             &:hover {
                 background-color: #dbdbdb;
@@ -155,18 +163,39 @@ body {
             padding: 4px;
         }
 
+        span#location {
+            font-size: 15px;
+            font-weight: bold;
+            padding: 4px 12px;
+            min-height: 18px;
+            min-width: 30px;
+        }
+
+        input[type="color"] {
+            height: 18px;
+            border: none;
+        }
+
+        label {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
     }
 }
 
 .spreadsheet {
     border-collapse: collapse;
     width: 100%;
-    margin-top: 27px;
+    margin-top: 33px;
+    border-spacing: 12px;
 
     th,
     td {
         border: 1px solid #c0c0c0;
-        padding: 0;
+        padding: 0 2px;
+        border-spacing: 0;
+        border-collapse: collapse;
         z-index: 1;
         height: 22px;
     }
@@ -175,6 +204,7 @@ body {
         min-width: 100px;
         height: 24px;
         user-select: none;
+        resize: horizontal;
     }
 
     th:first-child {
@@ -189,8 +219,22 @@ body {
     td.row-counter {
         text-align: right;
         color: #444444;
-        padding: 0 3px;
+        padding: 0px 3px;
         user-select: none !important;
+        position: sticky;
+        background-color: #eeeeee;
+        transform: translateX(-2px);
+        z-index: 10;
+        left: 0;
+
+        &::before {
+            content: '';
+            position: absolute;
+            border: 1px solid  #c0c0c0;
+            bottom: -1px;
+            width: 100%;
+            left: -2px;
+        }
     }
 }
 
@@ -202,46 +246,47 @@ body {
     content: '';
     position: absolute;
     background-color: #6cbdff41 !important;
-    border: 1px solid #4f9dddad !important;
     width: 100%;
     height: 100%;
+    z-index: 2;
     left: 0;
     top: 0;
-}
-
-span#location {
-    font-size: 15px;
-    position: absolute;
-    right: 10px;
-    font-weight: bold;
 }
 
 #contextMenu {
     display: none;
     position: absolute;
-    min-width: 130px;
+    min-width: 150px;
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
-  }
 
-  #contextMenu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    ul li {
+        padding: 8px 12px;
+        cursor: pointer;
+        user-select: none;
+        color: #252525;
+    }
+    
+    ul li:hover {
+        background-color: #ddd;
+    }
 
-  #contextMenu ul li {
-    padding: 8px 12px;
-    cursor: pointer;
-    user-select: none;
-    font-size: 14px;
-    color: #252525;
-  }
+    hr {
+        margin: 0;
+        color: #cfcfcf;
+    }
 
-  #contextMenu ul li:hover {
-    background-color: #ddd;
+    select {
+        font-size: 15px;
+    }
 }
 
 #documentName {

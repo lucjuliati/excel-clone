@@ -31,32 +31,58 @@
     </div>
     
     <nav id="nav">
-        <p><b>Excells</b></p>
+        <div>
+            <p><b>Excells</b></p>
 
-        <div class="vr"></div>
+            <div class="vr"></div>
+    
+            <button id="fileMenu">File</button>
+            <button id="editMenu">Edit</button>
+            <button id="helpMenu">Help</button>
+            <button id="debug">Debug</button>
+    
+            <div class="vr"></div>
+            
+            <p id="documentName">Untitled document</p>
+    
+            <div class="vr"></div>
+            
+            <p id="documentStatus">Checking...</p>    
+        </div>
+        <div>
+            <span id="location"></span>
 
-        <button id="fileMenu">File</button>
-        <button id="editMenu">Edit</button>
-        <button id="helpMenu">Help</button>
-        <button id="debug">Debug</button>
+            <div class="vr"></div>
+            
+            <label> 
+                Background
+                <input type="color" value="#f5f5f5" />
+            </label>
 
-        <div class="vr"></div>
-        
-        <p id="documentName">Untitled document</p>
-
-        <div class="vr"></div>
-        
-        <p id="documentStatus">Checking...</p>
-
-        <span id="location"></span>
+            <label>
+                Text
+                <input type="color" value="#111111" />
+            </label>
+        </div>
     </nav>
 
     <div id="contextMenu">
         <ul>
           <li onclick="clearCell(this)">Clear</li>
-          <li>Change type</li>
           <li onclick="changeColor(this, 'text')">Text color</li>
           <li onclick="changeColor(this, 'background')">Background color</li>
+          <hr />
+          <li>
+            <label>
+                Type
+                <select name="type" id="typeSelect" onchange="changeType(this)">
+                    <option value="text">Text</option>
+                    <option value="numeric">Numeric</option>
+                    <option value="checkbox">Checkbox</option>
+                    <option value="function">Function</option>
+                </select>
+            </label>
+          </li>
         </ul>
     </div>
 

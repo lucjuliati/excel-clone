@@ -76,8 +76,7 @@ menus = {
             )
         } }
     ],
-    debugMenu: [
-    ]
+    debugMenu: []
 };
 
 function getOffset(el) {

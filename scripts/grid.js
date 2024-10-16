@@ -2,9 +2,9 @@ const spreadsheet = document.querySelector(".spreadsheet");
 const tableHeader = spreadsheet.querySelector("thead tr");
 const tableBody = spreadsheet.querySelector("tbody");
 const locationIndicator = document.querySelector("#location");
+
 let isDragging = false;
 let startCell = null;
-
 let numRows = 50;
 let numCols = 27;
 
@@ -61,18 +61,28 @@ function generateSpreadsheet(file = null) {
                 cell.setAttribute("class", "row-counter");
                 cell.innerHTML = i;
             } else {
-                const location = `${letter}${i}`
+                const current = file?.data?.[`${letter}${i}`]
                 cell.setAttribute("contenteditable", "");
                 cell.setAttribute("spellcheck", false)
-                cell.setAttribute("data-location", location);
+                cell.setAttribute("data-location", `${letter}${i}`);
                 cell.setAttribute("data-type", "text");
 
-                if (file != null && file?.data?.[location]) {
-                    cell.textContent = file.data[location].content;
-                    cell.style.color = file.data[location].color;
-                    cell.style.backgroundColor = file.data[location].bg;
-                    cell.setAttribute("data-bg", file.data[location].bg);
-                    cell.setAttribute("data-color", file.data[location].color);
+                if (file != null && current) {
+                    cell.textContent = current?.content;
+                    cell.style.color = current?.color;
+                    cell.style.backgroundColor = current?.bg;
+                    cell.setAttribute("data-bg", current?.bg);
+                    cell.setAttribute("data-color", current?.color);
+                    cell.setAttribute("data-type", current?.type ?? "text");
+
+                    if (current?.type == "checkbox") {
+                        cell.setAttribute("data-checked", current?.checked ?? "0");
+
+                        if (current?.checked == "1")
+                            cell.innerHTML = `<input type="checkbox" checked />`;
+                        else
+                            cell.innerHTML = `<input type="checkbox" />`;
+                    }
                 } else {
                     cell.setAttribute("data-bg", "#ffffff");
                     cell.setAttribute("data-color", "#000000");
@@ -82,12 +92,20 @@ function generateSpreadsheet(file = null) {
                     if (e.target.dataset?.location) {
                         locationIndicator.innerHTML = e.target.dataset?.location;
                     }
-                };
 
-                cell.onchange = (e) => {
-                    console.log("changed")
-                    documentChanged = true;
-                }
+                    if (e.target.dataset.type == "checkbox") {
+                        let checkbox = e.target.querySelector('input[type="checkbox"]');
+
+                        if (checkbox != null) {
+                            const value = !checkbox.checked;
+                            e.target.dataset.checked = value ? "1" : "0";
+                            checkbox.checked = value;
+                        } else {
+                            e.target.removeAttribute("data-checked")
+                            e.target.dataset.type = "text"
+                        }
+                    }
+                };
             }
 
             row.appendChild(cell);
@@ -105,15 +123,19 @@ function save({ backup = false }) {
         rows: numRows,
         columns: numCols,
         data: {}
-    }
+    };
 
     cells.forEach((cell) => {
-        if ((cell.textContent != "" || cell.dataset.bg != "#ffffff") && cell.dataset?.location) {
+        let hasChanged = cell.textContent != "" || cell.dataset.bg != "#ffffff" || cell.dataset.type != "text"
+
+        if (hasChanged && cell.dataset?.location) {
             file.data[cell.dataset?.location] = {
                 "type": cell.dataset?.type,
                 "color": cell.dataset.color ?? "#000000",
                 "bg": cell.dataset.bg ?? "#ffffff",
                 "location": cell.dataset?.location,
+                "type": cell.dataset?.type,
+                "checked": cell.dataset?.checked,
                 "content": cell.textContent
             };
         }
@@ -122,7 +144,7 @@ function save({ backup = false }) {
     if (backup) {
         let statusBackup = localStorage.getItem("status-backup");
         if (statusBackup == "1") {
-            localStorage.setItem("backup-data", JSON.stringify(file))
+            localStorage.setItem("backup-data", JSON.stringify(file));
         }
     } else {
         let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(file));
@@ -149,8 +171,8 @@ function open() {
 
             reader.onload = (event) => {
                 const jsonContent = JSON.parse(event.target.result);
-                if (!jsonContent.columns || !jsonContent.rows) throw new Error()
-                generateSpreadsheet(jsonContent)
+                if (!jsonContent.columns || !jsonContent.rows) throw new Error();
+                generateSpreadsheet(jsonContent);
             };
 
             reader.onerror = (error) => {
@@ -159,8 +181,8 @@ function open() {
 
             reader.readAsText(file);
         } catch (err) {
-            console.error(err)
-            alert("Error while reading the provided file!")
+            console.error(err);
+            alert("Error while reading the provided file!");
         }
     };
 
@@ -182,8 +204,17 @@ spreadsheet.addEventListener("mousedown", (e) => {
         startCell = e.target;
         clearSelection();
 
-        if (e.target.contentEditable == "true") {
+        if (e.target.classList?.length == 0) {
             e.target.classList.add("selected");
+        }
+    } else if (e.target.tagName == "TD" && e.button == 2) {
+        const selected = document.querySelectorAll("td.selected");
+
+        if (selected?.length === 1) {
+            clearSelection();
+            if (e.target.classList?.length == 0) {
+                e.target.classList.add("selected");
+            }
         }
     }
 })
@@ -241,15 +272,15 @@ function updateSpreadsheet() {
 
     if (topField.value >= 1000)  {
         notice("Error. The document must have less than 1000 rows!");
-        return
+        return;
     } else if (bottomField.value >= 100) {
         notice("Error. The document must have less than 100 columns!");
-        return
+        return;
     }
 
     if ((topField.value + bottomField.value) == "") {
         notice("You didn't type any value!");
-        return
+        return;
     } 
 
     if ((topField.value + bottomField.value) * 0 == 0) {
