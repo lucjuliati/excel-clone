@@ -11,12 +11,12 @@ class ColorPicker extends HTMLElement {
         min-width: 50px;
         height: 12px;
         cursor: pointer;
-        border: 1px solid #999999;
+        border: 1px solid #bababa;
         border-radius: 5px;
         position: relative;
         display: inline;
         &:hover {
-            filter: brightness(0.94);
+            filter: brightness(0.92);
         }
     }
     .color-history {
@@ -27,8 +27,12 @@ class ColorPicker extends HTMLElement {
         height: 16px;
         width: 16px;
         margin: 0 1px;
+        cursor: pointer;
         border-radius: 12px;
         border: 1px solid #bababa;
+        &:hover {
+            filter: brightness(0.92);
+        }
     }`;
 
     constructor() {
@@ -49,7 +53,7 @@ class ColorPicker extends HTMLElement {
             input.setAttribute("type", "color");
             input.setAttribute("value", this.getAttribute("value"));
             document.body.appendChild(input);
-            input.click();
+            setTimeout(() => input.click(), 10);
 
             input.onchange = (e) => {
                 let color = e.target.value;

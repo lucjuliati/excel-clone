@@ -42,7 +42,7 @@ function changeColor(e, type) {
     input.setAttribute("value", type == "text" ? "#000000" : "#ffffff");
     document.body.appendChild(input);
     contextMenu.style.display = 'none';
-    input.click();
+    setTimeout(() => input.click(), 10);
 
     input.onchange = (e) => {
         let color = e.target.value;

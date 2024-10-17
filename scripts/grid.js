@@ -8,16 +8,16 @@ let startCell = null;
 let numRows = 50;
 let numCols = 27;
 
-function generateHeader(num) {
+function generateHeader(size) {
     const header = [];
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    for (let i = 0; i < Math.min(num, 26); i++) {
+    for (let i = 0; i < Math.min(size, 26); i++) {
         header.push(letters[i]);
     }
 
-    if (num > 26) {
-        let extra = num - 26;
+    if (size > 26) {
+        let extra = size - 26;
         let i = 0;
         
         while (extra > 0) {
@@ -32,9 +32,20 @@ function generateHeader(num) {
     return header;
 }
 
+function updateHeaderSize(e, rect) {
+    const location = e.target.parentElement?.dataset?.location;
+    const parent = e.target.parentElement;
+
+    if (location) {
+        parent.setAttribute("data-width", rect.width);
+        documentChanged = true;
+    }
+}
+
 function generateSpreadsheet(file = null) {
-    tableBody.querySelectorAll("tr").forEach((e) => e.remove())
-    tableHeader.innerHTML = ""
+    tableBody.querySelectorAll("tr").forEach((e) => e.remove());
+    tableHeader.innerHTML = "";
+    tableHeaderElements = [];
 
     if (file) {
         document.title = file.title;
@@ -42,16 +53,37 @@ function generateSpreadsheet(file = null) {
         numCols = file.columns;
     }
 
-    const header = ["", ...generateHeader(numCols)]
+    const header = ["", ...generateHeader(numCols)];
+
+    const resizeObserver = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+            if (entry.contentRect.width > 100) {
+                updateHeaderSize(entry, entry.contentRect);
+            }
+        }
+    });
 
     for (let i = 0; i < numCols; i++) {
         let th = document.createElement("th");
-        th.innerHTML = header[i] ?? "";
+        th.setAttribute("data-location", header[i]);
 
         if (i == 0) {
-            th.setAttribute("class", "row-counter")
+            th.setAttribute("class", "row-counter");
+        } else {
+            let div = document.createElement("div");
+            div.textContent = header[i] ?? "";
+            let data = file?.columnData?.[header[i]];
+            
+            if (data) {
+                th.setAttribute("data-width", data?.width);
+                div.style.width = `${data?.width}px`;
+            }
+
+            th.appendChild(div);
+            resizeObserver.observe(div);
         }
 
+        tableHeaderElements.push(th);
         tableHeader.appendChild(th);
     }
 
@@ -106,8 +138,8 @@ function generateSpreadsheet(file = null) {
                             e.target.dataset.checked = value ? "1" : "0";
                             checkbox.checked = value;
                         } else {
-                            e.target.removeAttribute("data-checked")
-                            e.target.dataset.type = "text"
+                            e.target.removeAttribute("data-checked");
+                            e.target.dataset.type = "text";
                         }
                     }
                 };
@@ -120,25 +152,37 @@ function generateSpreadsheet(file = null) {
     }
 }
 
-function save({ backup = false }) {
+async function save({ backup = false }) {
     const cells = tableBody.querySelectorAll("td[contenteditable]");
+    const columns = tableHeader.querySelectorAll("th[data-width]");
 
     let file = {
         title: document.title,
         rows: numRows,
         columns: numCols,
+        columnData: {},
         data: {}
     };
 
-    cells.forEach((cell) => {
-        let hasChanged = cell.textContent != "" || cell.dataset.bg != "#ffffff" || cell.dataset.type != "text"
+    columns.forEach((column) => {
+        let location = column.dataset?.location;
 
-        if (hasChanged && cell.dataset?.location) {
-            file.data[cell.dataset?.location] = {
+        file.columnData[location] = {
+            "location": location,
+            "width": column.dataset?.width ?? "100"
+        }
+    });
+
+    cells.forEach((cell) => {
+        let hasChanged = cell.textContent != "" || cell.dataset.bg != "#ffffff" || cell.dataset.type != "text";
+        let location = columns.dataset?.location;
+
+        if ((hasChanged || documentChanged) && location) {
+            file.data[location] = {
                 "type": cell.dataset?.type,
                 "color": cell.dataset.color ?? "#000000",
                 "bg": cell.dataset.bg ?? "#ffffff",
-                "location": cell.dataset?.location,
+                "location": location,
                 "type": cell.dataset?.type,
                 "checked": cell.dataset?.checked,
                 "content": cell.textContent
@@ -231,7 +275,7 @@ spreadsheet.addEventListener('mousemove', debounce((e) => {
         const currentCell = e.target;
         selectCells(startCell, currentCell);
     }
-}, 15));
+}, 9));
 
 spreadsheet.addEventListener('mouseup', function () {
     isDragging = false;
