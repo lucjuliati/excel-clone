@@ -47,6 +47,11 @@ function generateSpreadsheet(file = null) {
     for (let i = 0; i < numCols; i++) {
         let th = document.createElement("th");
         th.innerHTML = header[i] ?? "";
+
+        if (i == 0) {
+            th.setAttribute("class", "row-counter")
+        }
+
         tableHeader.appendChild(th);
     }
 
